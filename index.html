@@ -5,47 +5,63 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Cadastrar Pacotes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;800&family=Roboto:ital,wght@0,100;0,400;0,500;0,700;0,900;1,100;1,400;1,500&display=swap" rel="stylesheet">
+    <title>Cadastro de Pacotes</title>
 </head>
 <body>
     <header>
-        <h1>SyncTur</h1>
+        <h5>SyncTur</h5>
     </header>
     <main>
         <form>
             <legend>Cadastrar Pacotes</legend>
-            <div id="lado-esquerdo">
-                <label>Pacotes</label>
-                <input type="text" id="nome-pacote" placeholder="Digite nome completo">
-                <div id="esquerdo-baixo">
-                    <div class="box" >
-                        <label>Satus do Pacote</label>
-                        <input type="checkbox" name="ativo" id="ativo" >
-                        <label for="ativo" >Ativo</label>
-                        <input type="checkbox" name="inativo" id="inativo">
-                        <label>Inativo</label>
+            <div id="form-principal">
+                <div id="lado-esquerdo">
+                    <label>Pacotes</label>
+                    <input type="text" id="nome-pacote" placeholder="Digite nome completo">
+                    <div id="esquerdo-baixo">
+                        <div class="box" >
+                            <label class="box-titulo">Status do Pacote</label>
+                            <br>
+
+                            <input type="checkbox" name="status" id="ativo" >
+                            <label for="ativo" class="check">Ativo</label>
+                            <br>
+
+                            <input type="checkbox" name="status" id="inativo">
+                            <label for="inativo" class="check">Inativo</label>
+                        </div>
+                        <div class="box" >
+                            <label class="box-titulo">Data da Viagem</label>
+                            <br>
+                            <input type="date" placeholder="Data" id="data">
+                        </div>
+                        
                     </div>
-                    <div class="box" >
-                        <label>Data da Viagem</label>
-                        <input type="date" placeholder="Data" id="data">
-                    </div>
-                    
                 </div>
-            </div>
-            <div id="lado-direito">
-                <label>Descrição</label>
-                <textarea placeholder="Descrição do pacote" id="descricao"></textarea>
+                <div id="lado-direito">
+                    <label>Descrição</label>
+                    <textarea placeholder="Descrição do pacote" id="descricao"></textarea>
+                </div>
             </div>
             <button type="submit" id="botao-form">Cadastrar</button>
         </form>
         <div id="pacotes-cadastrados">
-            <section class="pacotes">
+            <div class="pacotes">
+                <section >
                 <h4 class="titulo">Pacote X</h4>
                 <p class="descricao">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolore laborum, maiores sunt delectus veritatis dolorem voluptates eius architecto atque eligendi porro similique laudantium id iusto dolores earum repellat ullam recusandae.</p>
                 <span class="data-viagem">Data da viagem:</span>
-                <button class="botao-editar">Editar</button>
-                <button class="botao-excluir">Excluir</button>
+                <div class="div-botao">
+                    <button class="botao-editar">Editar</button>
+                    <button class="botao-excluir">Excluir</button>
+                </div>
+                
             </section>
+            </div>
+            
         </section>
     </main>
     <footer>
@@ -58,5 +74,6 @@
            <span>Skype: sample-username</span> 
         </div>
     </footer>
+    
 </body>
 </html>
