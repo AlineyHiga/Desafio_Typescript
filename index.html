@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Cadastrar Pacotes</title>
+</head>
+<body>
+    <header>
+        <h1>SyncTur</h1>
+    </header>
+    <main>
+        <form>
+            <legend>Cadastrar Pacotes</legend>
+            <div id="lado-esquerdo">
+                <label>Pacotes</label>
+                <input type="text" id="nome-pacote" placeholder="Digite nome completo">
+                <div id="esquerdo-baixo">
+                    <div class="box" >
+                        <label>Satus do Pacote</label>
+                        <input type="checkbox" name="ativo" id="ativo" >
+                        <label for="ativo" >Ativo</label>
+                        <input type="checkbox" name="inativo" id="inativo">
+                        <label>Inativo</label>
+                    </div>
+                    <div class="box" >
+                        <label>Data da Viagem</label>
+                        <input type="date" placeholder="Data" id="data">
+                    </div>
+                    
+                </div>
+            </div>
+            <div id="lado-direito">
+                <label>Descrição</label>
+                <textarea placeholder="Descrição do pacote" id="descricao"></textarea>
+            </div>
+            <button type="submit" id="botao-form">Cadastrar</button>
+        </form>
+        <div id="pacotes-cadastrados">
+            <section class="pacotes">
+                <h4 class="titulo">Pacote X</h4>
+                <p class="descricao">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolore laborum, maiores sunt delectus veritatis dolorem voluptates eius architecto atque eligendi porro similique laudantium id iusto dolores earum repellat ullam recusandae.</p>
+                <span class="data-viagem">Data da viagem:</span>
+                <button class="botao-editar">Editar</button>
+                <button class="botao-excluir">Excluir</button>
+            </section>
+        </section>
+    </main>
+    <footer>
+        <h2>SyncTur</h2>
+        <hr>
+        <div>
+           <span>Company Inc., 8901 Marmora Road, Glasgow, D04 89GR</span>
+           <span>Call us now toll free: (800)2345-6789</span>
+           <span>Customer support: support@demolink.org</span>
+           <span>Skype: sample-username</span> 
+        </div>
+    </footer>
+</body>
+</html>
