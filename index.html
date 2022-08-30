@@ -26,11 +26,11 @@
                             <label class="box-titulo">Status do Pacote</label>
                             <br>
 
-                            <input type="checkbox" name="status" id="ativo" >
+                            <input type="radio" name="status" class="status" id="ativo" value=True>
                             <label for="ativo" class="check">Ativo</label>
                             <br>
 
-                            <input type="checkbox" name="status" id="inativo">
+                            <input type="radio" name="status" class="status" id="inativo" value=False>
                             <label for="inativo" class="check">Inativo</label>
                         </div>
                         <div class="box" >
@@ -51,18 +51,17 @@
         <div id="pacotes-cadastrados">
             <div class="pacotes">
                 <section >
-                <h4 class="titulo">Pacote X</h4>
-                <p class="descricao">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolore laborum, maiores sunt delectus veritatis dolorem voluptates eius architecto atque eligendi porro similique laudantium id iusto dolores earum repellat ullam recusandae.</p>
-                <span class="data-viagem">Data da viagem:</span>
-                <div class="div-botao">
-                    <button class="botao-editar">Editar</button>
-                    <button class="botao-excluir">Excluir</button>
-                </div>
-                
-            </section>
+                    <h4 class="titulo">Pacote X</h4>
+                    <p class="descricao">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolore laborum, maiores sunt delectus veritatis dolorem voluptates eius architecto atque eligendi porro similique laudantium id iusto dolores earum repellat ullam recusandae.</p>
+                    <span class="data-viagem">Data da viagem:</span>
+                    <div class="div-botao">
+                        <button class="botao-editar" value="1">Editar</button>
+                        <button class="botao-excluir">Excluir</button>
+                    </div>
+                </section>
             </div>
             
-        </section>
+        </div>
     </main>
     <footer>
         <h2>SyncTur</h2>
@@ -74,6 +73,6 @@
            <span>Skype: sample-username</span> 
         </div>
     </footer>
-    
+    <script src="code.js"></script>
 </body>
 </html>
