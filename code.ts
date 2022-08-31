@@ -43,11 +43,12 @@ class ListaDePacotes implements IListaDePacotes {
     ListarPacotes():Array<object>{
         return this.listaP
     }
-    AddPacotes(pacote:object):void{
-        this.listaP.push(pacote)
+    AddPacotes(pacote:object,index:number):void{
+        index--
+        this.listaP[index]=pacote
     }
     ExcluirPacotes(id:number):void{
-        this.listaP.splice(id,1)
+        this.listaP.splice(id-1,1)
     }
     EditarPacotes(id:number):object{
         let pacote:object=this.listaP.filter((objeto)=>objeto.id==id)
@@ -61,26 +62,31 @@ class ListaDePacotes implements IListaDePacotes {
 const MostrarPacote=(objeto:object):void=>{
     let titulo:string = objeto.nome;
     let descricao:string=objeto.descricao;
-    let data:string= objeto.data;
+    let data=new Date(objeto.data)
+    console.log(data)
+    let dataDia:number=data.getDate();
+    let dataMes:number= data.getMonth()+1;
+    let dataAno:number= data.getFullYear();
+
     let id:number=objeto.id;
     document.querySelector('#pacotes-cadastrados').innerHTML+=
-` <div class="pacotes">
+` <div class="pacotes" id='card-${id}'>
     <section >
-        <h4 class="titulo">${titulo}</h4>
-        <p class="descricao">${descricao}</p>
-        <span class="data-viagem">Data da viagem:${data}</span>
+        <h4 class="titulo" id='t-${id}'>${titulo}</h4>
+        <p class="descricao" id='dc-${id}'>${descricao}</p>
+        <span class="data-viagem" id='dt-${id}' >Data da viagem: ${dataDia}/${dataMes}/${dataAno}</span>
         <div class="div-botao">
             <button class="botao-editar" id='b-${id}' value=${id}>Editar</button>
-            <button class="botao-excluir" id='b-${id}'value=${id}>Excluir</button>
+            <button class="botao-excluir" id='b-${id}'value=${id} onclick='Excluir(${id})'>Excluir</button>
         </div>
     </section>
 </div>`;
 
 }
 
-let pacotesCadastrados=new ListaDePacotes()
+var pacotesCadastrados=new ListaDePacotes()
 
-//pegar a ip
+//pegar a api
 const pacote: string = 'https://62361b7feb166c26eb2f488a.mockapi.io/pacotes'
 
     fetch(pacote, {
@@ -94,22 +100,67 @@ const pacote: string = 'https://62361b7feb166c26eb2f488a.mockapi.io/pacotes'
 
     listaDeObjetos.map((objeto, index) => {
         listaDeObjetos[index] = objeto;
-        pacotesCadastrados.AddPacotes(objeto)
-        console.log(listaDeObjetos[index]);
-        MostrarPacote(objeto)
+        let id:number= objeto.id
+        pacotesCadastrados.AddPacotes(objeto,id);
+        MostrarPacote(objeto);
     })
 })
 
 //CADASTRAR pacotes
-const Cadastro=()=>{
-    let input_nome=document.queryCommandValue('#nome-pacote')
-    let input_status=document.queryCommandValue('.status')
-    let input_data=document.queryCommandValue('#data')
-    let input_descricao=document.queryCommandValue('#descricao')
-    let botao_form=document.querySelector('#botao-form')
 
+let botao_form=document.querySelector('#botao-form');
+
+
+function Cadastro():void{
+   
+    let input_nome:string =document.querySelector('#nome-pacote');
+    
+    let input_status:NodeListOf<Element> =document.querySelectorAll('input[name="status"]:checked');
+    let stat:boolean=input_status[0].value;
+
+    let input_data=document.querySelector('#data').value
+    let data: string=input_data.toString() +'T18:58:24.397Z'
+    
+    //função para ver a data 
+    let data_comparada=new Date(data).getTime()
+    let data_atual= new Date().getTime()
+    if(data_comparada<data_atual){
+        return alert("A data escrita já passou")
+    }
+        
+    
+    let input_descricao:string=document.querySelector('#descricao');
+
+    let id:number=pacotesCadastrados.ListarPacotes().length;
+    id+=1;
+
+    let pacote=new Pacote(input_nome.value,input_descricao.value,data,stat,id);
+    
+    pacotesCadastrados.AddPacotes(pacote,id);
+    console.log(input_data);
+    console.log(pacotesCadastrados);
+    MostrarPacote(pacote);
+    //limpar os forms
+    input_nome.value='';
+    input_status[0].checked=false 
+    input_data.value='';
+    input_descricao.value='';
+
+    return
 }
+botao_form.addEventListener('click',()=>{
+    Cadastro()
+})
+console.log(pacotesCadastrados);
 
-
-
-console.log('qq',pacotesCadastrados)
+//###Excluir####
+let botao_excluir=document.querySelectorAll('.botao-excluir') 
+console.log(botao_excluir)
+function Excluir(id):void{
+    pacotesCadastrados.ExcluirPacotes(id)
+    let elemento=document.querySelector(`#card-${id}`)
+    console.log(elemento)
+    elemento.remove()
+}
+//status está estranho 
+//refazer o metodo da id

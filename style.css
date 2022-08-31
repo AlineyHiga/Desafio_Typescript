@@ -29,7 +29,7 @@ main{
     flex-direction: column;
     align-items: center;
 }
-main form{
+main section{
     width: 82vw;
     max-width: 1189px;
     display: flex;
@@ -43,7 +43,7 @@ main form{
     line-height: 21px;
     
 }
-form legend{
+section legend{
     text-align: center;
     font-family: 'Inter';
     font-style: normal;
@@ -52,11 +52,11 @@ form legend{
     line-height: 29px;
     margin-bottom: 2.5rem;
 }
-form #form-principal{
+section #form-principal{
     display: flex;
     justify-content: space-between;
 }
-form #lado-esquerdo{
+section #lado-esquerdo{
     max-width:589px;
     width:41vw ;  
     display: flex;
@@ -139,7 +139,7 @@ form #lado-esquerdo{
     cursor: text;
 }
 
-form #lado-direito{
+section #lado-direito{
     max-width: 555px;
     width: 38vw;
     display: flex;
@@ -170,7 +170,7 @@ form #lado-direito{
 }
 
 /* botao do form */
-form button{
+section button{
     align-self: center;
     align-items: center;
     margin-top: 2.5rem;

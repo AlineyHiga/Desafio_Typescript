@@ -15,39 +15,39 @@
         <h5>SyncTur</h5>
     </header>
     <main>
-        <form>
+        <section >
             <legend>Cadastrar Pacotes</legend>
             <div id="form-principal">
                 <div id="lado-esquerdo">
                     <label>Pacotes</label>
-                    <input type="text" id="nome-pacote" placeholder="Digite nome completo">
+                    <input type="text" id="nome-pacote" placeholder="Digite nome completo" required>
                     <div id="esquerdo-baixo">
                         <div class="box" >
                             <label class="box-titulo">Status do Pacote</label>
                             <br>
 
-                            <input type="radio" name="status" class="status" id="ativo" value=True>
+                            <input type="radio" name="status" class="status" id="ativo"  value=True required>
                             <label for="ativo" class="check">Ativo</label>
                             <br>
 
-                            <input type="radio" name="status" class="status" id="inativo" value=False>
+                            <input type="radio" name="status" class="status" id="inativo" value=False required>
                             <label for="inativo" class="check">Inativo</label>
                         </div>
                         <div class="box" >
                             <label class="box-titulo">Data da Viagem</label>
                             <br>
-                            <input type="date" placeholder="Data" id="data">
+                            <input type="date" placeholder="Data" id="data" required>
                         </div>
                         
                     </div>
                 </div>
                 <div id="lado-direito">
                     <label>Descrição</label>
-                    <textarea placeholder="Descrição do pacote" id="descricao"></textarea>
+                    <textarea placeholder="Descrição do pacote" id="descricao" required></textarea>
                 </div>
             </div>
             <button type="submit" id="botao-form">Cadastrar</button>
-        </form>
+        </section>
         <div id="pacotes-cadastrados">
             <div class="pacotes">
                 <section >
