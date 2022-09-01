@@ -1,5 +1,20 @@
+// interface {
+interface IPacote{
+    MudancaNome():void;
+    MudancaDiscricao():void;
+    MudancaData():void;
+    MudancaStatus():void;
+    MudancaId():void;
+}
+interface IListaDePacotes{
+    ListarPacotes():Array<object>;
+    AddPacotes(p:object):void;
+    ExcluirPacotes(id:number):void;
+    EditarPacotes(id:number):object;
+}
+
 //####classes####
-class Pacote {
+class Pacote  implements IPacote{
     nome:string;
     descricao:string;
     data: string;
@@ -29,13 +44,7 @@ class Pacote {
         this.id=m_id;
     }
 }
-// interface {
-interface IListaDePacotes{
-    ListarPacotes():Array<object>;
-    AddPacotes(p:object):void;
-    ExcluirPacotes(id:number):void;
-    EditarPacotes(id:number):object;
-}
+
 
 class ListaDePacotes implements IListaDePacotes {
     listaP:Array<object>=[];
@@ -57,18 +66,17 @@ class ListaDePacotes implements IListaDePacotes {
     }
 }
 
-//####Funções####
+//####Funções GERAIS####
 //função para mostrar os pacotes
 const MostrarPacote=(objeto:object):void=>{
     let titulo:string = objeto.nome;
     let descricao:string=objeto.descricao;
     let data=new Date(objeto.data)
-    console.log(data)
     let dataDia:number=data.getDate();
     let dataMes:number= data.getMonth()+1;
     let dataAno:number= data.getFullYear();
-
     let id:number=objeto.id;
+    //cria o card do pacote no html
     document.querySelector('#pacotes-cadastrados').innerHTML+=
 ` <div class="pacotes" id='card-${id}'>
     <section >
@@ -76,7 +84,7 @@ const MostrarPacote=(objeto:object):void=>{
         <p class="descricao" id='dc-${id}'>${descricao}</p>
         <span class="data-viagem" id='dt-${id}' >Data da viagem: ${dataDia}/${dataMes}/${dataAno}</span>
         <div class="div-botao">
-            <button class="botao-editar" id='b-${id}' value=${id}>Editar</button>
+            <button class="botao-editar" id='b-${id}' value=${id} onclick='Editar(${id})'>Editar</button>
             <button class="botao-excluir" id='b-${id}'value=${id} onclick='Excluir(${id})'>Excluir</button>
         </div>
     </section>
@@ -95,13 +103,17 @@ const pacote: string = 'https://62361b7feb166c26eb2f488a.mockapi.io/pacotes'
     })
     .then((response: any) => response.json())
     .then((result: any) =>{
-
     let listaDeObjetos: Object[] = result
-
     listaDeObjetos.map((objeto, index) => {
         listaDeObjetos[index] = objeto;
-        let id:number= objeto.id
-        pacotesCadastrados.AddPacotes(objeto,id);
+        let nome=objeto.nome
+        let descricao=objeto.descricao
+        let data=objeto.data
+        let status=objeto.status
+        let id:number= Number(objeto.id)
+        let pacote =new Pacote(nome,descricao,data,status,id)
+        
+        pacotesCadastrados.AddPacotes(pacote,id);
         MostrarPacote(objeto);
     })
 })
@@ -116,11 +128,12 @@ function Cadastro():void{
     let input_nome:string =document.querySelector('#nome-pacote');
     
     let input_status:NodeListOf<Element> =document.querySelectorAll('input[name="status"]:checked');
-    let stat:boolean=input_status[0].value;
+    let stat:boolean=Boolean(input_status[0].value);
 
-    let input_data=document.querySelector('#data').value
-    let data: string=input_data.toString() +'T18:58:24.397Z'
+    let input_data=document.querySelector('#data')
     
+    let data: string=input_data.value.toString() 
+    data+='T18:58:24.397Z'
     //função para ver a data 
     let data_comparada=new Date(data).getTime()
     let data_atual= new Date().getTime()
@@ -130,10 +143,11 @@ function Cadastro():void{
         
     
     let input_descricao:string=document.querySelector('#descricao');
-
-    let id:number=pacotesCadastrados.ListarPacotes().length;
+    //novo id do objeto será o id no último pacote +1
+    let id:number=pacotesCadastrados.ListarPacotes();
+    id=Number(id[id.length -1].id)
     id+=1;
-
+    console.log('id',id)
     let pacote=new Pacote(input_nome.value,input_descricao.value,data,stat,id);
     
     pacotesCadastrados.AddPacotes(pacote,id);
@@ -159,8 +173,47 @@ console.log(botao_excluir)
 function Excluir(id):void{
     pacotesCadastrados.ExcluirPacotes(id)
     let elemento=document.querySelector(`#card-${id}`)
-    console.log(elemento)
+    console.log(elemento) //<--
     elemento.remove()
 }
-//status está estranho 
-//refazer o metodo da id
+
+//##EDITAR##
+function Editar(id):void{
+    //
+    document.querySelector('header').scrollIntoView()
+    console.log('oi')
+    console.log(id)
+    //pegar o pacote escolhido
+    let pacote:object= pacotesCadastrados.listaP
+    pacote=pacote[id-1]
+    
+    console.log(pacote)
+    console.log(pacote.status)
+    console.log(pacote.data.split('T')[0])
+
+    let input_nome=document.querySelector('#nome-pacote');
+    let input_status:NodeListOf<Element> =document.querySelectorAll('input[name="status"]');
+    console.log(input_status)
+    let input_data=document.querySelector('#data')
+    let input_descricao=document.querySelector('#descricao');
+    //colocando as informaçoes
+    input_descricao.value=pacote.descricao
+    input_nome.value=pacote.nome;
+    if (pacote.status==true) {
+        input_status[0].checked=true
+    }
+    else{
+        input_status[1].checked=true
+    }
+    input_data.value=pacote.data.split('T')[0];
+    input_descricao.value=pacote.descricao;
+    Excluir(id)
+    botao_form.addEventListener('click',()=>{
+        Cadastro()
+    })
+}
+// nome:string;
+// descricao:string;
+// data: string;
+// status:boolean;
+// id:number;

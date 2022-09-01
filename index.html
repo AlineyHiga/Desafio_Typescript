@@ -16,10 +16,10 @@
     </header>
     <main>
         <section >
-            <legend>Cadastrar Pacotes</legend>
+            <legend id="top">Cadastrar Pacotes</legend>
             <div id="form-principal">
                 <div id="lado-esquerdo">
-                    <label>Pacotes</label>
+                    <label href="#top">Pacotes</label>
                     <input type="text" id="nome-pacote" placeholder="Digite nome completo" required>
                     <div id="esquerdo-baixo">
                         <div class="box" >
@@ -49,18 +49,17 @@
             <button type="submit" id="botao-form">Cadastrar</button>
         </section>
         <div id="pacotes-cadastrados">
-            <div class="pacotes">
+            <div class="pacotes" id='card-0'>
                 <section >
-                    <h4 class="titulo">Pacote X</h4>
-                    <p class="descricao">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolore laborum, maiores sunt delectus veritatis dolorem voluptates eius architecto atque eligendi porro similique laudantium id iusto dolores earum repellat ullam recusandae.</p>
-                    <span class="data-viagem">Data da viagem:</span>
+                    <h4 class="titulo" id='t-0'>Card 0</h4>
+                    <p class="descricao" id='dc-0'>teste</p>
+                    <span class="data-viagem" id='dt-0}' >Data da viagem: 00/00/00</span>
                     <div class="div-botao">
-                        <button class="botao-editar" value="1">Editar</button>
-                        <button class="botao-excluir">Excluir</button>
+                        <button class="botao-editar" id='b-0' value=${id} onclick='Editar(0)'>Editar</button>
+                        <button class="botao-excluir" id='b-0'value=${id} onclick="Excluir(0)" >Excluir</button>
                     </div>
                 </section>
             </div>
-            
         </div>
     </main>
     <footer>
