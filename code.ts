@@ -44,8 +44,6 @@ class Pacote  implements IPacote{
         this.id=m_id;
     }
 }
-
-
 class ListaDePacotes implements IListaDePacotes {
     listaP:Array<object>=[];
      
@@ -65,10 +63,25 @@ class ListaDePacotes implements IListaDePacotes {
         return pacote
     }
 }
+
 //##codigo geral##
 
+//declaração das variaveis //
+var pacotesCadastrados=new ListaDePacotes()
+//varialvel que vai ter o valor da última id do pacote adicionado, para n ter repetição
+var ultimo_id=0;
 
-//função para mostrar os pacotes
+let botao_cadastrar=document.querySelector('#botao-form');
+let input_nome=document.querySelector('#nome-pacote');
+let input_status:NodeListOf<Element> =document.querySelectorAll('input[name="status"]'); 
+let input_data=document.querySelector('#data');
+let input_descricao=document.querySelector('#descricao');
+let botao_excluir=document.querySelectorAll('.botao-excluir') 
+let botaoForm_editar=document.querySelector('#botaoform-editar')
+
+//###CADASTRAR### 
+
+//função para mostrar os pacotes no html
 const MostrarPacote=(objeto:object):void=>{
     let titulo:string = objeto.nome;
     let descricao:string=objeto.descricao;
@@ -93,16 +106,6 @@ const MostrarPacote=(objeto:object):void=>{
 
 }
 
-
-var pacotesCadastrados=new ListaDePacotes()
-var ultimo_id;
-let botao_form=document.querySelector('#botao-form');
-let input_nome=document.querySelector('#nome-pacote');
-let input_status:NodeListOf<Element> =document.querySelectorAll('input[name="status"]'); 
-let input_data=document.querySelector('#data')
-let input_descricao=document.querySelector('#descricao');
-let botao_excluir=document.querySelectorAll('.botao-excluir') 
-
 //pegar a api
 const pacote: string = 'https://62361b7feb166c26eb2f488a.mockapi.io/pacotes'
 
@@ -116,20 +119,18 @@ const pacote: string = 'https://62361b7feb166c26eb2f488a.mockapi.io/pacotes'
     ultimo_id=Number(listaDeObjetos.length)
     listaDeObjetos.map((objeto, index) => {
         listaDeObjetos[index] = objeto;
+        //formatar as informaçoes 
         let nome=objeto.nome
         let descricao=objeto.descricao
         let data=objeto.data
         let status=objeto.status
         let id:number= Number(objeto.id)
         let pacote =new Pacote(nome,descricao,data,status,id)
-        
+        //colocar os pacotes dentro da lista 
         pacotesCadastrados.AddPacotes(pacote,id);
         MostrarPacote(objeto);
     })
 })
-
-//CADASTRAR pacotes
-
 
 function Cadastro():void{
     let stat:boolean=Boolean(input_status[0].value);
@@ -144,7 +145,7 @@ function Cadastro():void{
     //novo id do objeto será o id no último pacote +1
     let id:number=ultimo_id+1
     ultimo_id=id;
-    console.log(ultimo_id)
+
     let pacote=new Pacote(input_nome.value,input_descricao.value,data,stat,id);
     //cadastrar pacotes na lista
     pacotesCadastrados.AddPacotes(pacote,id);
@@ -155,28 +156,31 @@ function Cadastro():void{
     input_data.value='';
     input_descricao.value='';
 
-    return
+    return document.querySelector(`#card-${id}`).scrollIntoView()
 }
-botao_form.addEventListener('click',()=>{
+//botão para ver quando o botão de cadastrar for apertado
+botao_cadastrar.addEventListener('click',()=>{
     Cadastro()
-})
-console.log(pacotesCadastrados);
-
+    
+}) 
 //###Excluir####
 
-function Excluir(id):void{
+function Excluir(id:number):void{
+    //excluir o pacote da lista
     pacotesCadastrados.ExcluirPacotes(id)
-    let elemento=document.querySelector(`#card-${id}`)
-    console.log(elemento) //<--
-    elemento.remove()
+    //excluir a div do pacote
+    document.querySelector(`#card-${id}`).remove()
 }
 
 //##EDITAR##
-function ModificarPacote(pacote:object,id:number,nome:string,descricao:string):object{
+//função para modificar o pacote na lista 
+function ModificarPacote(pacote:object,nome:string,descricao:string):object{
+    console.log('estou aqui')
     let stat:boolean=Boolean(input_status[0].value);
     let data: string=input_data.value.toString() ;
     data+='T18:58:24.397Z';
-
+    console.log('nome',nome)
+    console.log('nome',descricao)
     //modificar o objeto na lista
     pacote.MudancaNome(nome)
     pacote.MudancaDiscricao(descricao)
@@ -191,10 +195,30 @@ function ModificarPacote(pacote:object,id:number,nome:string,descricao:string):o
     input_descricao.value='';
     return pacote
 }
-function ModificarCard(modificado:object):void{
+//função para modificar o conteudo no html
+function ModificarCard(modificado:object,id:number):void{
+    let card_nome= document.querySelector(`#t-${id}`)
+    let card_descricao= document.querySelector(`#dc-${id}`)
+    let card_data= document.querySelector(`#dt-${id}`)
     
+    let titulo:string = modificado.nome;
+    let descricao:string=modificado.descricao;
+    let data=new Date(modificado.data)
+    let dataDia:number=data.getDate();
+    let dataMes:number= data.getMonth()+1;
+    let dataAno:number= data.getFullYear();
+
+    card_nome?.innerHTML=`${titulo}`
+    card_descricao?.innerHTML=`${descricao}`
+    card_data?.innerHTML=`Data da viagem: ${dataDia}/${dataMes}/${dataAno}`
+   
 }
-function Editar(id):void{
+//função chamda quando se aperta o botão editar nos card
+function Editar(id:number):void{
+    //setar os botões para poder modificar 
+    botao_cadastrar.style.display = "none"
+    botaoForm_editar.style.display = "block"
+
     //scroll até os inputs
     document.querySelector('header').scrollIntoView()
    
@@ -214,13 +238,12 @@ function Editar(id):void{
     input_data.value=pacote.data.split('T')[0];
     input_descricao.value=pacote.descricao;
     
-    botao_form.addEventListener('click',()=>{
-        let novoP:object=ModificarPacote(pacote,id,input_nome.value,input_descricao.value);
-        ModificarCard(novoP);
+    //verificar quando o botão para editar for apertado
+    botaoForm_editar.addEventListener('click',()=>{
+        let novoP:object=ModificarPacote(pacote,input_nome.value,input_descricao.value);
+        ModificarCard(novoP,id);
+        botao_cadastrar.style.display ="block"
+        botaoForm_editar.style.display = "none"
+        document.querySelector(`#card-${id}`).scrollIntoView()
     })
 }
-// nome:string;
-// descricao:string;
-// data: string;
-// status:boolean;
-// id:number;

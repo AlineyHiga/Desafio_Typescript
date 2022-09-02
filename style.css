@@ -189,6 +189,9 @@ section button{
     line-height: 19px;
     text-align: center;
 }
+#botaoform-editar{
+    display: none;
+}
 
 main #pacotes-cadastrados{
     max-width: 1189px;
