@@ -1,4 +1,4 @@
-// interface {
+//##interface ##
 interface IPacote{
     MudancaNome():void;
     MudancaDiscricao():void;
@@ -65,8 +65,9 @@ class ListaDePacotes implements IListaDePacotes {
         return pacote
     }
 }
+//##codigo geral##
 
-//####Funções GERAIS####
+
 //função para mostrar os pacotes
 const MostrarPacote=(objeto:object):void=>{
     let titulo:string = objeto.nome;
@@ -92,7 +93,15 @@ const MostrarPacote=(objeto:object):void=>{
 
 }
 
+
 var pacotesCadastrados=new ListaDePacotes()
+var ultimo_id;
+let botao_form=document.querySelector('#botao-form');
+let input_nome=document.querySelector('#nome-pacote');
+let input_status:NodeListOf<Element> =document.querySelectorAll('input[name="status"]'); 
+let input_data=document.querySelector('#data')
+let input_descricao=document.querySelector('#descricao');
+let botao_excluir=document.querySelectorAll('.botao-excluir') 
 
 //pegar a api
 const pacote: string = 'https://62361b7feb166c26eb2f488a.mockapi.io/pacotes'
@@ -104,6 +113,7 @@ const pacote: string = 'https://62361b7feb166c26eb2f488a.mockapi.io/pacotes'
     .then((response: any) => response.json())
     .then((result: any) =>{
     let listaDeObjetos: Object[] = result
+    ultimo_id=Number(listaDeObjetos.length)
     listaDeObjetos.map((objeto, index) => {
         listaDeObjetos[index] = objeto;
         let nome=objeto.nome
@@ -120,39 +130,24 @@ const pacote: string = 'https://62361b7feb166c26eb2f488a.mockapi.io/pacotes'
 
 //CADASTRAR pacotes
 
-let botao_form=document.querySelector('#botao-form');
-
 
 function Cadastro():void{
-   
-    let input_nome:string =document.querySelector('#nome-pacote');
-    
-    let input_status:NodeListOf<Element> =document.querySelectorAll('input[name="status"]:checked');
     let stat:boolean=Boolean(input_status[0].value);
-
-    let input_data=document.querySelector('#data')
-    
-    let data: string=input_data.value.toString() 
-    data+='T18:58:24.397Z'
+    let data: string=input_data.value.toString() ;
+    data+='T18:58:24.397Z';
     //função para ver a data 
-    let data_comparada=new Date(data).getTime()
-    let data_atual= new Date().getTime()
+    let data_comparada=new Date(data).getTime();
+    let data_atual= new Date().getTime();
     if(data_comparada<data_atual){
-        return alert("A data escrita já passou")
+        return alert("A data escrita já passou");
     }
-        
-    
-    let input_descricao:string=document.querySelector('#descricao');
     //novo id do objeto será o id no último pacote +1
-    let id:number=pacotesCadastrados.ListarPacotes();
-    id=Number(id[id.length -1].id)
-    id+=1;
-    console.log('id',id)
+    let id:number=ultimo_id+1
+    ultimo_id=id;
+    console.log(ultimo_id)
     let pacote=new Pacote(input_nome.value,input_descricao.value,data,stat,id);
-    
+    //cadastrar pacotes na lista
     pacotesCadastrados.AddPacotes(pacote,id);
-    console.log(input_data);
-    console.log(pacotesCadastrados);
     MostrarPacote(pacote);
     //limpar os forms
     input_nome.value='';
@@ -168,8 +163,7 @@ botao_form.addEventListener('click',()=>{
 console.log(pacotesCadastrados);
 
 //###Excluir####
-let botao_excluir=document.querySelectorAll('.botao-excluir') 
-console.log(botao_excluir)
+
 function Excluir(id):void{
     pacotesCadastrados.ExcluirPacotes(id)
     let elemento=document.querySelector(`#card-${id}`)
@@ -178,25 +172,37 @@ function Excluir(id):void{
 }
 
 //##EDITAR##
+function ModificarPacote(pacote:object,id:number,nome:string,descricao:string):object{
+    let stat:boolean=Boolean(input_status[0].value);
+    let data: string=input_data.value.toString() ;
+    data+='T18:58:24.397Z';
+
+    //modificar o objeto na lista
+    pacote.MudancaNome(nome)
+    pacote.MudancaDiscricao(descricao)
+    pacote.MudancaData(data)
+    pacote.MudancaStatus(stat)
+    console.log(pacote)
+    
+    //limpar os forms
+    input_nome.value='';
+    input_status[0].checked=false 
+    input_data.value='';
+    input_descricao.value='';
+    return pacote
+}
+function ModificarCard(modificado:object):void{
+    
+}
 function Editar(id):void{
-    //
+    //scroll até os inputs
     document.querySelector('header').scrollIntoView()
-    console.log('oi')
-    console.log(id)
+   
     //pegar o pacote escolhido
-    let pacote:object= pacotesCadastrados.listaP
+    let pacote:object= pacotesCadastrados.ListarPacotes()
     pacote=pacote[id-1]
     
-    console.log(pacote)
-    console.log(pacote.status)
-    console.log(pacote.data.split('T')[0])
-
-    let input_nome=document.querySelector('#nome-pacote');
-    let input_status:NodeListOf<Element> =document.querySelectorAll('input[name="status"]');
-    console.log(input_status)
-    let input_data=document.querySelector('#data')
-    let input_descricao=document.querySelector('#descricao');
-    //colocando as informaçoes
+    //colocando as informaçoes nos inputs
     input_descricao.value=pacote.descricao
     input_nome.value=pacote.nome;
     if (pacote.status==true) {
@@ -207,9 +213,10 @@ function Editar(id):void{
     }
     input_data.value=pacote.data.split('T')[0];
     input_descricao.value=pacote.descricao;
-    Excluir(id)
+    
     botao_form.addEventListener('click',()=>{
-        Cadastro()
+        let novoP:object=ModificarPacote(pacote,id,input_nome.value,input_descricao.value);
+        ModificarCard(novoP);
     })
 }
 // nome:string;
