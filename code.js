@@ -133,18 +133,14 @@ function Excluir(id) {
 //##EDITAR##
 //função para modificar o pacote na lista 
 function ModificarPacote(pacote, nome, descricao) {
-    console.log('estou aqui');
     var stat = Boolean(input_status[0].value);
     var data = input_data.value.toString();
     data += 'T18:58:24.397Z';
-    console.log('nome', nome);
-    console.log('nome', descricao);
     //modificar o objeto na lista
     pacote.MudancaNome(nome);
     pacote.MudancaDiscricao(descricao);
     pacote.MudancaData(data);
     pacote.MudancaStatus(stat);
-    console.log(pacote);
     //limpar os forms
     input_nome.value = '';
     input_status[0].checked = false;
@@ -175,22 +171,25 @@ function Editar(id) {
     //scroll até os inputs
     document.querySelector('header').scrollIntoView();
     //pegar o pacote escolhido
-    var pacote = pacotesCadastrados.ListarPacotes();
-    pacote = pacote[id - 1];
+    var pacote = pacotesCadastrados.ListarPacotes().filter(function (objeto, index) {
+        if (objeto.id == id) {
+            return objeto;
+        }
+    });
     //colocando as informaçoes nos inputs
-    input_descricao.value = pacote.descricao;
-    input_nome.value = pacote.nome;
-    if (pacote.status == true) {
+    input_descricao.value = pacote[0].descricao;
+    input_nome.value = pacote[0].nome;
+    if (pacote[0].status == true) {
         input_status[0].checked = true;
     }
     else {
         input_status[1].checked = true;
     }
-    input_data.value = pacote.data.split('T')[0];
-    input_descricao.value = pacote.descricao;
+    input_data.value = pacote[0].data.split('T')[0];
+    input_descricao.value = pacote[0].descricao;
     //verificar quando o botão para editar for apertado
     botaoForm_editar.addEventListener('click', function () {
-        var novoP = ModificarPacote(pacote, input_nome.value, input_descricao.value);
+        var novoP = ModificarPacote(pacote[0], input_nome.value, input_descricao.value);
         ModificarCard(novoP, id);
         botao_cadastrar.style.display = "block";
         botaoForm_editar.style.display = "none";

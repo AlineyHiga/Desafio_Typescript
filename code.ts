@@ -128,6 +128,7 @@ const pacote: string = 'https://62361b7feb166c26eb2f488a.mockapi.io/pacotes'
         let pacote =new Pacote(nome,descricao,data,status,id)
         //colocar os pacotes dentro da lista 
         pacotesCadastrados.AddPacotes(pacote,id);
+
         MostrarPacote(objeto);
     })
 })
@@ -175,18 +176,16 @@ function Excluir(id:number):void{
 //##EDITAR##
 //função para modificar o pacote na lista 
 function ModificarPacote(pacote:object,nome:string,descricao:string):object{
-    console.log('estou aqui')
+    
     let stat:boolean=Boolean(input_status[0].value);
     let data: string=input_data.value.toString() ;
     data+='T18:58:24.397Z';
-    console.log('nome',nome)
-    console.log('nome',descricao)
     //modificar o objeto na lista
     pacote.MudancaNome(nome)
     pacote.MudancaDiscricao(descricao)
     pacote.MudancaData(data)
     pacote.MudancaStatus(stat)
-    console.log(pacote)
+    
     
     //limpar os forms
     input_nome.value='';
@@ -223,24 +222,29 @@ function Editar(id:number):void{
     document.querySelector('header').scrollIntoView()
    
     //pegar o pacote escolhido
-    let pacote:object= pacotesCadastrados.ListarPacotes()
-    pacote=pacote[id-1]
+    let pacote= pacotesCadastrados.ListarPacotes().filter(function(objeto:object,index:number):any{
+        if(objeto.id==id){
+            return objeto
+    }
+    
+})
+ 
     
     //colocando as informaçoes nos inputs
-    input_descricao.value=pacote.descricao
-    input_nome.value=pacote.nome;
-    if (pacote.status==true) {
+    input_descricao.value=pacote[0].descricao
+    input_nome.value=pacote[0].nome;
+    if (pacote[0].status==true) {
         input_status[0].checked=true
     }
     else{
         input_status[1].checked=true
     }
-    input_data.value=pacote.data.split('T')[0];
-    input_descricao.value=pacote.descricao;
+    input_data.value=pacote[0].data.split('T')[0];
+    input_descricao.value=pacote[0].descricao;
     
     //verificar quando o botão para editar for apertado
     botaoForm_editar.addEventListener('click',()=>{
-        let novoP:object=ModificarPacote(pacote,input_nome.value,input_descricao.value);
+        let novoP:object=ModificarPacote(pacote[0],input_nome.value,input_descricao.value);
         ModificarCard(novoP,id);
         botao_cadastrar.style.display ="block"
         botaoForm_editar.style.display = "none"
